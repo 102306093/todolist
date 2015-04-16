@@ -1,14 +1,17 @@
 class TodosController < ApplicationController
 	def index
 		@todo = Todo.all
-	end
+		if params[:done] == "t"
+			@todo = Todo.where("status = ?","t")
+		elsif params[:done] == "f"
+			@todo = Todo.where("status IS NOT ?","t")
+		end
+	end 
 
 	def create
 		@todo = Todo.new(todo_params)
 		if @todo.save
 			redirect_to root_path
-		else
-			render :new
 		end
 	end
 
@@ -28,6 +31,16 @@ class TodosController < ApplicationController
 	def destroy
 		@todo=Todo.find(params[:id])
 		@todo.destroy
+		redirect_to root_path
+	end
+
+	def change
+		@todo = Todo.find(params[:id])
+		if @todo.status == "t"
+			@todo.update_attribute(:status,false)
+		else
+			@todo.update_attribute(:status,true)
+		end
 		redirect_to root_path
 	end
 

@@ -2,24 +2,48 @@
 
 <%= form_for Todo.new do |f|%>
 <%= f.text_field :event%>
+<%= hidden_field_tag :status,false%>
 <%= f.submit%>
 <%end%>
 
 <table>
 	<tr>
-		<td><%= button_to "All", root_path, :method => :get %></td>
-		<td><%= button_to "Pending", root_path, :method => :get %></td>
-		<td><%= button_to "Completed", root_path, :method => :get %></td>
+		<td>
+			<%= form_tag todos_path, :method => :get do %> 
+			<%= hidden_field_tag :done,"n"%>
+			<%= submit_tag "All" %>
+			<%end%>
+		</td>
+		<td>
+			<%= form_tag todos_path, :method => :get do %> 
+			<%= hidden_field_tag :done,"t"%>
+			<%= submit_tag "Completed" %>
+			<%end%>
+		</td>
+		<td>
+			<%= form_tag todos_path, :method => :get do %> 
+			<%= hidden_field_tag :done,"f"%>
+			<%= submit_tag "Pending" %>
+			<%end%>
+		</td>
 	</tr>
 </table>
 
+<p></p>
+
+<table>
 <% @todo.each do |todo| %>
-	<table width=70%>
 		<tr>
 			<td><%= todo.event %></td>
 			<td><%= button_to "Edit", edit_todo_path(todo), :method => :get %></td>
 			<td><%= button_to "Delete", todo_path(todo), method:"delete" %></td>
+			<td>
+				<%if todo.status != "t"%>
+					<%= button_to "Completed", change_todo_path(todo), :method => :post%>
+				<%else%>
+					<%= button_to "Pending", change_todo_path(todo), :method => :post%>
+				<%end%>
+			</td>
 		</tr>
-	</table>
-<%end%>
-
+	<%end%>
+</table>

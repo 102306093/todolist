@@ -2,7 +2,7 @@ class CreateTodos < ActiveRecord::Migration
   def change
     create_table :todos do |t|
       t.string :event
-      t.string :status
+      t.boolean :status, :default => false
 
       t.timestamps null: false
     end
