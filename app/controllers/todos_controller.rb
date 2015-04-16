@@ -4,7 +4,7 @@ class TodosController < ApplicationController
 		if params[:done] == "t"
 			@todo = Todo.where("status = ?","t")
 		elsif params[:done] == "f"
-			@todo = Todo.where("status IS NOT ?","t")
+			@todo = Todo.where("status <> ?","t")
 		end
 	end 
 
